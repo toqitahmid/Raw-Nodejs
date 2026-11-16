@@ -8,7 +8,7 @@ export const bodyPaser = (req: IncomingMessage, res: ServerResponse): Promise<an
         })
         req.on("end", () => {
             try{
-                resolve(body);
+                resolve(JSON.parse(body));
             }
             catch(error){
                 reject(error)

@@ -8,23 +8,17 @@ interface Iproducts {
 }
 
 const getProductController = (req: IncomingMessage, res: ServerResponse) => {
-  let url = req.url;
-  let method = req.method;
-
-  if (url?.startsWith("/products") && method === "GET") {
+  
     const products = getProducts();
-
+    let msgSuccess = products.length === 0 ? "There is no products" : "Here are your products";
+    let pdtSuccess = products.length === 0 ? [] : products;
+    
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "Here your products", data: products }));
-  } else {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "There are no products" }));
-  }
+    res.end(JSON.stringify({ message: `${msgSuccess}`, data: pdtSuccess }));
 };
 
 const getProductById = (req: IncomingMessage, res: ServerResponse) => {
   let url = req.url;
-  let method = req.method;
   let extractUrl = url?.split("/");
   let id = Number(extractUrl?.at(2));
   
@@ -32,7 +26,7 @@ const getProductById = (req: IncomingMessage, res: ServerResponse) => {
   let product = products.find((p: Iproducts) => p.id === id);
   console.log(product);
   
-  if (method === "GET") {
+  if (product) {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
