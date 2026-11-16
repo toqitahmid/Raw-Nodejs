@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "http";
-import getProducts from "../services/product.services";
+import { getProducts, writeProducts } from "../services/product.services";
 import { bodyPaser } from "../utils/parseBody";
 interface Iproducts {
   id: number;
@@ -47,12 +47,15 @@ const getProductById = (req: IncomingMessage, res: ServerResponse) => {
 
 const createProduct = async(req: IncomingMessage, res: ServerResponse) => {
   try {
-     const data = await bodyPaser(req,res);
-     console.log(data);
+    const data = await bodyPaser(req,res);
+    const products = getProducts();
+     products.push(data);
+     writeProducts(products);
      res.writeHead(200, { "Content-Type": "application/json" });
      res.end(
        JSON.stringify({
          message: "product add successfully",
+         data: data,
        }),
      );
    } catch {
