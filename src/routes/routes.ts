@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "http";
-import {createProduct, getProductById, getProductController} from "../controllers/product.controller";
+import {createProduct, getProductById, getProductController, modifyProduct} from "../controllers/product.controller";
 import rootCotroller from "../controllers/root.controller";
 
 
@@ -21,6 +21,8 @@ const routeHandler = (req: IncomingMessage, res: ServerResponse) => {
     getProductById(req, res);
   } else if (url === "/products" && method === "POST") {
     createProduct(req, res);
+  } else if (url === `/products` && method === "PUT") {
+    modifyProduct(req, res);
   } else {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Invalid url!" }));
